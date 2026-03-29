@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Bandara</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #eef2f7;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: #ffffff;
+  position: fixed;
+  padding: 20px;
+}
+
+.menu a {
+  display: block;
+  padding: 12px;
+  margin: 8px 0;
+  text-decoration: none;
+  color: #333;
+  border-radius: 8px;
+}
+
+.menu a:hover {
+  background: #007bff;
+  color: white;
+}
+
+/* MAIN */
+.main {
+  margin-left: 240px;
+  padding: 20px;
+}
+
+.header {
+  background: linear-gradient(to right, #ffd200, #007bff);
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+/* BUTTON */
+.btn {
+  background: #ff4d4d;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* POPUP */
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  margin: 10% auto;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <h2>Nunukan Airport</h2>
+
+  <div class="menu">
+    <a href="#">Dashboard</a>
+    <a href="#">Profil</a>
+    <a href="#">Listrik</a>
+    <a href="#">Elban</a>
+    <a href="#">Banglan</a>
+    <a href="#">PKP-PK</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="header">
+    Unit Penyelenggara Bandar Udara Kelas III Nunukan
+  </div>
+
+  <div class="card">
+    <h2>Dashboard Bandara</h2>
+
+    <p>Runway: 1.450 m</p>
+    <p>Flight: Senin - Selasa - Rabu</p>
+    <p>Airline: Susi Air</p>
+
+    <br>
+    <button class="btn" onclick="bukaForm()">Laporkan!</button>
+  </div>
+
+</div>
+
+<!-- POPUP FORM -->
+<div class="popup" id="formPopup">
+  <div class="popup-content">
+    <h3>Laporan Kerusakan</h3>
+
+    <label>Unit</label>
+    <select id="unit">
+      <option>Banglan</option>
+      <option>AVSEC</option>
+      <option>ELBAN</option>
+      <option>PKP-PK</option>
+      <option>Kantor</option>
+    </select>
+
+    <label>Peralatan</label>
+    <input type="text" id="alat">
+
+    <label>Lokasi</label>
+    <input type="text" id="lokasi" readonly>
+
+    <label>Kerusakan</label>
+    <textarea id="kerusakan"></textarea>
+
+    <button onclick="ambilLokasi()">📍 Lokasi</button>
+    <button onclick="kirimWA()">Kirim</button>
+    <button onclick="tutupForm()">Tutup</button>
+  </div>
+</div>
+
+<script>
+
+// buka popup
+function bukaForm(){
+  document.getElementById("formPopup").style.display = "block";
+}
+
+// tutup popup
+function tutupForm(){
+  document.getElementById("formPopup").style.display = "none";
+}
+
+// ambil GPS
+function ambilLokasi(){
+  navigator.geolocation.getCurrentPosition(function(pos){
+    document.getElementById("lokasi").value =
+      pos.coords.latitude + "," + pos.coords.longitude;
+  });
+}
+
+// kirim WA
+function kirimWA(){
+  var unit = document.getElementById("unit").value;
+  var alat = document.getElementById("alat").value;
+  var lokasi = document.getElementById("lokasi").value;
+  var kerusakan = document.getElementById("kerusakan").value;
+
+  var nomor = "628XXXXXXXXXX"; // GANTI
+
+  var pesan = `LAPORAN KERUSAKAN\n\n`
+    + `Unit: ${unit}\n`
+    + `Peralatan: ${alat}\n`
+    + `Lokasi: ${lokasi}\n`
+    + `Kerusakan: ${kerusakan}`;
+
+  var url = "https://wa.me/" + nomor + "?text=" + encodeURIComponent(pesan);
+  window.open(url);
+}
+</script>
+
+</body>
+</html>
